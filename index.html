@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thailand Trip 2025 - Interactive Travel Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: transparent;
+            border: none;
+            padding: 15px 30px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .map-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .map-embed {
+            width: 100%;
+            height: 450px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .location-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .image-info {
+            padding: 15px;
+        }
+
+        .image-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .image-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .google-maps-link {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .google-maps-link:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
+        }
+
+        .location-links {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(66, 133, 244, 0.05);
+            border-radius: 10px;
+        }
+
+        .day-card {
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .day-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .day-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .day-meta {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .day-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .day-content.expanded {
+            max-height: 2000px;
+            padding: 20px;
+        }
+
+        .location-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin: 15px 0;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 0 15px 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .location-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .location-icon {
+            width: 35px;
+            height: 35px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 20px;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .location-details {
+            flex-grow: 1;
+        }
+
+        .location-details h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .location-details p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .mini-map-link {
+            font-size: 0.85rem;
+            background: #4285f4;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .mini-map-link:hover {
+            background: #3367d6;
+        }
+
+        .distance-info {
+            text-align: right;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 20px;
+            min-width: 80px;
+        }
+
+        .total-summary {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .country-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .malaysia {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .thailand {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .route-visualization {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .route-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .route-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #ff6b6b, #4ecdc4, #667eea);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 30px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .fuel-tip {
+            background: linear-gradient(135deg, #ffa726, #ff7043);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(255, 167, 38, 0.3);
+        }
+
+        .fuel-tip h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            display: block;
+            margin: auto;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 2%;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 30px;
+            right: 50px;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #ff6b6b;
+        }
+
+        .modal-caption {
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+            background: rgba(0,0,0,0.5);
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tab-button {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .day-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .day-meta {
+                margin-top: 10px;
+            }
+            
+            .location-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .distance-info {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+            
+            .map-embed {
+                height: 300px;
+            }
+            
+            .close-modal {
+                right: 20px;
+                font-size: 40px;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated-card {
+            animation: slideInUp 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇹🇭 THAILAND VACATION 2025</h1>
+            <p>Epic Road Trip Journey | September 14-17, 2025</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card animated-card">
+                <div class="stat-number">759.2</div>
+                <div class="stat-label">Total KM</div>
+            </div>
+            <div class="stat-card animated-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Days</div>
+            </div>
+            <div class="stat-card animated-card">
+                <div class="stat-number">448</div>
+                <div class="stat-label">KM in Thailand</div>
+            </div>
+            <div class="stat-card animated-card">
+                <div class="stat-number">RM24.60</div>
+                <div class="stat-label">Est. Toll Cost</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('overview')">📍 Route Overview</button>
+            <button class="tab-button" onclick="showTab('daily')">📅 Daily Itinerary</button>
+            <button class="tab-button" onclick="showTab('summary')">📊 Trip Summary</button>
+        </div>
+
+        <div id="overview" class="tab-content active">
+            <div class="map-container">
+                <h2 style="text-align: center; margin-bottom: 25px; color: #333;">🗺️ Interactive Route Map</h2>
+                <iframe 
+                    class="map-embed"
+                    src="https://www.google.com/maps/embed?pb=!1m52!1m12!1m3!1d2512303.0816326136!2d99.36717892636718!3d6.097726976388159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m37!3e0!4m5!1s0x304c645af4b6e87d%3A0xe5f7a0b1c2d3e4f5!2sAlor%20Setar%2C%20Kedah%2C%20Malaysia!3m2!1d6.1248!2d100.3648!4m5!1s0x30457c123456789a%3A0xabcdef0123456789!2sPattani%2C%20Thailand!3m2!1d6.8692!2d101.2502!4m5!1s0x304f1b2c3d4e5f60%3A0x123456789abcdef0!2sNarathiwat%2C%20Thailand!3m2!1d6.4254!2d101.8255!4m5!1s0x304e2c3d4e5f6071%3A0x23456789abcdef01!2sYala%2C%20Thailand!3m2!1d6.5410!2d101.2815!4m5!1s0x304d3e4f5071829a%3A0x3456789abcdef012!2sBetong%2C%20Yala%2C%20Thailand!3m2!1d5.7759!2d101.0740!4m5!1s0x304c645af4b6e87d%3A0xe5f7a0b1c2d3e4f5!2sAlor%20Setar%2C%20Kedah%2C%20Malaysia!3m2!1d6.1248!2d100.3648!5e0!3m2!1sen!2smy!4v1693886400000!5m2!1sen!2smy"
+                    allowfullscreen="" 
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <div class="location-links">
+                    <h3 style="margin-bottom: 15px; color: #333;">🔗 Quick Navigation Links</h3>
+                    <a href="https://maps.google.com/maps?saddr=Alor+Setar,+Kedah,+Malaysia&daddr=Pattani,+Thailand+to:Narathiwat,+Thailand+to:Yala,+Thailand+to:Betong,+Yala,+Thailand&hl=en" target="_blank" class="google-maps-link">
+                        🗺️ Full Route on Google Maps
+                    </a>
+                    <a href="https://maps.google.com/?q=Pattani+Central+Mosque,+Thailand" target="_blank" class="google-maps-link">
+                        🕌 Pattani Attractions
+                    </a>
+                    <a href="https://maps.google.com/?q=Betong+Thailand+attractions" target="_blank" class="google-maps-link">
+                        🌆 Betong City Guide
+                    </a>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <h2 style="text-align: center; margin-bottom: 25px; color: #333;">📸 Destination Highlights</h2>
+                <div class="image-gallery">
+                    <div class="image-card">
+                        <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqTODCLc3AkTohewiJP0dnar7reJzdPdNv9ZNiXyt0o1s1mki48jz053Y4N2GQjh6td8wpDEeLTvbvDwEwrIvYbPuXaNxbEVPfggDBZOum2QTfN459idZOJglyoWvlptvAPEds=s1360-w1360-h1020-rw" 
+                             alt="Pattani Central Mosque" class="location-image">
+                        <div class="image-info">
+                            <div class="image-title">🕌 Pattani Central Mosque</div>
+                            <div class="image-description">Beautiful Islamic architecture and spiritual center</div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <img src="https://lh5.googleusercontent.com/p/AF1QipMSjVFjvZyGIhxyfYw6-UB5JoSppgkaFiVGKdsy=s1600" 
+                             alt="Thai Beach Paradise" class="location-image">
+                        <div class="image-info">
+                            <div class="image-title">🏖️ Thai Beach Paradise</div>
+                            <div class="image-description">Stunning beaches - Pantai Sakom, Pantai Panare & Ban Thon</div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBmTc0dt3P853vqeVvlCLWZmAWoQmd8pkQUQ&s" 
+                             alt="Thai Fresh Seafood" class="location-image">
+                        <div class="image-info">
+                            <div class="image-title">🦞 Fresh Thai Seafood</div>
+                            <div class="image-description">Amazing seafood at Pattani Banlay Seafood Cafe</div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <img src="https://p16-lemon8-sign-sg.tiktokcdn.com/tos-alisg-v-a3e477-sg/o4dPrAGyIDEIAGXke7JAQ0ALebtdeUxjNsXbgu~tplv-sdweummd6v-text-logo-v1:QHdhbnNoYWhydWxhbXJp:q75.jpeg?lk3s=c7f08e79&source=lemon8_seo&x-expires=1760011200&x-signature=KMyuxhk3VPXzVbnGtZLopRC3YrI%3D" 
+                             alt="Historic Mosque" class="location-image">
+                        <div class="image-info">
+                            <div class="image-title">🕌 400-Year Historic Mosque</div>
+                            <div class="image-description">Masjid Wadi Al-Hussein - Ancient Islamic heritage</div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <img src="https://www.shutterstock.com/image-photo/yala-thailand-august-15-2018-600nw-1162101577.jpg" 
+                             alt="Betong City" class="location-image">
+                        <div class="image-info">
+                            <div class="image-title">🌆 Betong - Southernmost Thailand</div>
+                            <div class="image-description">Thailand's southernmost city with unique culture</div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/b3/f3/e1/img-20180918-133238-largejpg.jpg?w=1000&h=-1&s=1" 
+                             alt="Historic Tunnels" class="location-image">
+                        <div class="image-info">
+                            <div class="image-title">🚇 WWII Historic Tunnels</div>
+                            <div class="image-description">Piyamit & Mongkollit Tunnels - Amazing wartime history</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="route-visualization">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">🛣️ Journey Overview</h2>
+                <div class="route-timeline">
+                    <div class="timeline-item">
+                        <h3>🇲🇾 MALAYSIA START</h3>
+                        <p><strong>Starting Point:</strong> Alor Setar, Kedah</p>
+                        <p><strong>Journey to Border:</strong> Durian Burung Border (73.5km, 1h 21min)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3>🇹🇭 THAILAND EXPLORATION</h3>
+                        <p><strong>3 Amazing Days:</strong> Pattani, Narathiwat, Yala, Betong</p>
+                        <p><strong>Total Distance:</strong> 580.3km of incredible discoveries</p>
+                        <p><strong>Highlights:</strong> Beaches, Mosques, Museums, Historic Tunnels, Local Cuisine</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3>🇲🇾 MALAYSIA RETURN</h3>
+                        <p><strong>Return Route:</strong> Direct back to Alor Setar (390km, 4h 52min)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="daily" class="tab-content">
+            <div class="day-card">
+                <div class="day-header" onclick="toggleDay(this)">
+                    <div>
+                        <div class="day-title">Day T1 - September 14 (Sunday)</div>
+                        <div class="day-meta">Thailand Adventure Begins! <span class="country-badge thailand">Thailand</span></div>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="day-content">
+                    <div class="location-item">
+                        <div class="location-icon">🌅</div>
+                        <div class="location-details">
+                            <h4>Alor Setar (start)</h4>
+                            <p>Morning city tour</p>
+                        </div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🚪</div>
+                        <div class="location-details">
+                            <h4>Durian Burung Border</h4>
+                            <p>Malaysia-Thailand border crossing</p>
+                        </div>
+                        <div class="distance-info">73.5km<br>1h 21min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🏖️</div>
+                        <div class="location-details">
+                            <h4>Pantai Sakom</h4>
+                            <p>Beautiful beach destination</p>
+                        </div>
+                        <div class="distance-info">70km<br>1h 12min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🕌</div>
+                        <div class="location-details">
+                            <h4>Pattani Central Mosque</h4>
+                            <p>Historic religious site</p>
+                        </div>
+                        <div class="distance-info">57.1km<br>55min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🦐</div>
+                        <div class="location-details">
+                            <h4>Pattani Banlay Seafood Cafe</h4>
+                            <p>Fresh seafood experience</p>
+                        </div>
+                        <div class="distance-info">6.7km<br>12min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🕌</div>
+                        <div class="location-details">
+                            <h4>Masjid Kerisik Pattani</h4>
+                            <p>Ancient mosque visit</p>
+                        </div>
+                        <div class="distance-info">5.1km<br>7min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🌊</div>
+                        <div class="location-details">
+                            <h4>Teluk Samilae</h4>
+                            <p>Beach hopping adventure</p>
+                        </div>
+                        <div class="distance-info">27.5km<br>32min</div>
+                    </div>
+
+                    <div class="location-item">
+                        <div class="location-icon">🌊</div>
+                        <div class="location-details">
+                            <h4>Pantai Panare</h4>
+                            <p>Beach hopping adventure</p>
+                        </div>
+                        <div class="distance-info">23.3km<br>30min</div>
+                    </div>
+
+                    <div class="location-item">
+                        <div class="location-icon">🌊</div>
+                        <div class="location-details">
+                            <h4>Ban Thon Beach</h4>
+                            <p>Beach hopping adventure</p>
+                        </div>
+                        <div class="distance-info">61.2km<br>1h</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🏨</div>
+                        <div class="location-details">
+                            <h4>Imperial Hotel Narathiwat</h4>
+                            <p>Overnight accommodation + city exploration</p>
+                        </div>
+                        <div class="distance-info">15.8km total<br>22min</div>
+                    </div>
+                    <div class="total-summary">
+                        <strong>Day Total: 340.2km (6h 11min)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card">
+                <div class="day-header" onclick="toggleDay(this)">
+                    <div>
+                        <div class="day-title">Day T2 - September 15 (Monday)</div>
+                        <div class="day-meta">Cultural Discoveries <span class="country-badge thailand">Thailand</span></div>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="day-content">
+                    <div class="location-item">
+                        <div class="location-icon">📚</div>
+                        <div class="location-details">
+                            <h4>Muzium Manuskrip Al-Quran</h4>
+                            <p>Historical manuscript museum</p>
+                        </div>
+                        <div class="distance-info">12km<br>18min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🕌</div>
+                        <div class="location-details">
+                            <h4>Masjid 400 tahun Wadi Al-Hussein</h4>
+                            <p>400-year-old historic mosque</p>
+                        </div>
+                        <div class="distance-info">14.8km<br>14min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🏨</div>
+                        <div class="location-details">
+                            <h4>Nibong Resort, Yala</h4>
+                            <p>Resort accommodation + Yala city exploration</p>
+                        </div>
+                        <div class="distance-info">82km total<br>1h 10min</div>
+                    </div>
+                    <div class="total-summary">
+                        <strong>Day Total: 108.8km</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card">
+                <div class="day-header" onclick="toggleDay(this)">
+                    <div>
+                        <div class="day-title">Day T3 - September 16 (Tuesday)</div>
+                        <div class="day-meta">Final Thailand Day <span class="country-badge thailand">Thailand</span></div>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="day-content">
+                    <div class="location-item">
+                        <div class="location-icon">🚇</div>
+                        <div class="location-details">
+                            <h4>Piyamit Tunnel</h4>
+                            <p>Historic WWII tunnel system</p>
+                        </div>
+                        <div class="distance-info">145km<br>3h 5min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🚇</div>
+                        <div class="location-details">
+                            <h4>Betong Mongkollit Tunnel</h4>
+                            <p>Famous tunnel landmark</p>
+                        </div>
+                        <div class="distance-info">16.4km<br>27min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🌆</div>
+                        <div class="location-details">
+                            <h4>Betong City Exploration</h4>
+                            <p>Final Thailand city tour</p>
+                        </div>
+                        <div class="distance-info">20km local</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🚪</div>
+                        <div class="location-details">
+                            <h4>Border Pengkalan Hulu</h4>
+                            <p>Return to Malaysia</p>
+                        </div>
+                        <div class="distance-info">7km<br>19min</div>
+                    </div>
+                    <div class="location-item">
+                        <div class="location-icon">🛣️</div>
+                        <div class="location-details">
+                            <h4>Return to Alor Setar</h4>
+                            <p>Final return trip</p>
+                        </div>
+                        <div class="distance-info">
+                            <strong>119km<br>2h 8min</strong>
+                        </div>
+                    </div>
+                    <div class="total-summary">
+                        <strong>Day Total: 310.2km</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="summary" class="tab-content">
+            <div class="route-visualization">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">📊 Complete Trip Summary</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <h3 style="color: #ff6b6b; margin-bottom: 15px;">🇲🇾 Malaysia Distances</h3>
+                        <p><strong>Going:</strong> 73.5km (1h 21min)</p>
+                        <p><strong>Return:</strong> 119km (2h 8min)</p>
+                        <p><strong>Total Toll:</strong> RM24.60</p>
+                    </div>
+
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <h3 style="color: #4ecdc4; margin-bottom: 15px;">🇹🇭 Thailand Distances</h3>
+                        <p><strong>Day T1:</strong> 283.1km</p>
+                        <p><strong>Day T2:</strong> 108.8km</p>
+                        <p><strong>Day T3:</strong> 188.4km</p>
+                        <p><strong>Thailand Total:</strong> 580.3km</p>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">🏁 Grand Total</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div style="padding: 20px; background: #f8f9ff; border-radius: 10px;">
+                            <h4 style="color: #667eea;">Grand Total</h4>
+                            <div style="font-size: 2rem; font-weight: bold; color: #333;">759.2km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fuel-tip">
+            <h3>⛽ Fuel Tip</h3>
+            <p>"This is an estimate for fuel usage planning in Thailand. Fuel is expensive there, so maybe fill up the tank just once while we're there!"</p>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab content and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function toggleDay(header) {
+            const content = header.nextElementSibling;
+            const card = header.parentElement;
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                card.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                card.classList.add('expanded');
+            }
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.day-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = (index * 0.1) + 's';
+                card.style.animation = 'slideInUp 0.6s ease forwards';
+            });
+        });
+
+        // Image modal functions
+        function openModal(img) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = img.src;
+            modalImg.alt = img.alt;
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
